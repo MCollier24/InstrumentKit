@@ -1,0 +1,184 @@
+#!/usr/bin/env python
+"""
+Driver for the ITECH IT8500 single input programmable load
+
+Originally contributed by Matthew Collier (matthew.collier@outlook.com)
+"""
+
+# IMPORTS #####################################################################
+
+
+from instruments.units import ureg as u
+
+from instruments.abstract_instruments import ProgrammableLoad
+from instruments.util_fns import unitful_property, bool_property
+
+
+# CLASSES #####################################################################
+
+
+class IT8500(ProgrammableLoad, ProgrammableLoad.Channel):
+    """
+    The IT8500 is a single input programmable load.
+
+    Because it is a single channel input, this object inherits from both
+    ProgrammableLoad and ProgrammableLoad.Channel.
+
+    Example usage:
+
+    >>> import time
+    >>> import instruments as ik
+    >>> psu = ik.itech.IT8500.open_visa(<visa-adress>)
+    >>> psu.voltage = 3 # Sets input voltage to 3V.
+    >>> psu.input = True
+    >>> psu.voltage
+    array(3.0) * V
+    >>> psu.voltage_sense < 5
+    True
+    >>> psu.input = False
+    >>> psu.voltage_sense < 1
+    True
+    """
+
+    # ENUMS ##
+
+    # I don't know of any possible enumerations supported
+    # by this instrument.
+
+    # PROPERTIES ##
+
+    voltage = unitful_property(
+        "VOLT",
+        u.volt,
+        doc="""
+        Gets/sets the input voltage.
+
+        Note there is no bounds checking on the value specified.
+
+        :units: As specified, or assumed to be :math:`\\text{V}` otherwise.
+        :type: `float` or `~pint.Quantity`
+        """,
+    )
+
+    current = unitful_property(
+        "CURR",
+        u.amp,
+        doc="""
+        Gets/sets the input current.
+
+        Note there is no bounds checking on the value specified.
+
+        :units: As specified, or assumed to be :math:`\\text{A}` otherwise.
+        :type: `float` or `~pint.Quantity`
+        """,
+    )
+
+    voltage_sense = unitful_property(
+        "MEAS:VOLT",
+        u.volt,
+        readonly=True,
+        doc="""
+        Gets the actual input voltage as measured by the sense wires.
+
+        :units: :math:`\\text{V}` (volts)
+        :rtype: `~pint.Quantity`
+        """,
+    )
+
+    current_sense = unitful_property(
+        "MEAS:CURR",
+        u.amp,
+        readonly=True,
+        doc="""
+        Gets the actual input current as measured by the sense wires.
+
+        :units: :math:`\\text{A}` (amps)
+        :rtype: `~pint.Quantity`
+        """,
+    )
+
+    overvoltage = unitful_property(
+        "VOLT:PROT",
+        u.volt,
+        doc="""
+        Gets/sets the overvoltage protection setting in volts.
+
+        Note there is no bounds checking on the value specified.
+
+        :units: As specified, or assumed to be :math:`\\text{V}` otherwise.
+        :type: `float` or `~pint.Quantity`
+        """,
+    )
+
+    overcurrent = unitful_property(
+        "CURR:PROT",
+        u.amp,
+        doc="""
+        Gets/sets the overcurrent protection setting in amps.
+
+        Note there is no bounds checking on the value specified.
+
+        :units: :math:`\\text{V}` (volts)
+        :rtype: `~pint.Quantity`
+        """,
+    )
+
+    input = bool_property(
+        "INP",
+        inst_true="1",
+        inst_false="0",
+        doc="""
+        Gets/sets the input status.
+
+        This is a toggle setting. True will turn on the instrument input
+        while False will turn it off.
+
+        :type: `bool`
+        """,
+    )
+
+    @property
+    def name(self):
+        """
+        The name of the connected instrument, as reported by the
+        standard SCPI command ``*IDN?``.
+
+        :rtype: `str`
+        """
+        idn_string = self.query("*IDN?")
+        idn_list = idn_string.split(",")
+        return " ".join(idn_list[:2])
+
+    @property
+    def mode(self):
+        """
+        Unimplemented.
+        """
+        raise NotImplementedError("Setting the mode is not implemented.")
+
+    @mode.setter
+    def mode(self, newval):
+        """
+        Unimplemented.
+        """
+        raise NotImplementedError("Setting the mode is not implemented.")
+
+    # METHODS ##
+
+    def reset(self):
+        """
+        Reset overvoltage and overcurrent errors to resume operation.
+        """
+        self.sendcmd("CURR:PROT:CLE")
+        self.sendcmd("VOLT:PROT:CLE")
+
+    @property
+    def channel(self):
+        """
+        Return the channel (which in this case is the entire instrument, since
+        there is only 1 channel on the IT8500.)
+
+        :rtype: 'tuple' of length 1 containing a reference back to the parent
+            IT8500 object.
+        """
+        return (self,)
