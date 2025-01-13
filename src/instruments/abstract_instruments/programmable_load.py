@@ -77,7 +77,7 @@ class ProgrammableLoad(Instrument, metaclass=abc.ABCMeta):
 
         @property
         @abc.abstractmethod
-        def output(self):
+        def input(self):
             """
             Gets/sets the input status for the programmable load channel. This is an
             abstract method.
@@ -85,9 +85,9 @@ class ProgrammableLoad(Instrument, metaclass=abc.ABCMeta):
             :type: `bool`
             """
 
-        @output.setter
+        @input.setter
         @abc.abstractmethod
-        def output(self, newval):
+        def input(self, newval):
             pass
 
     # PROPERTIES #
