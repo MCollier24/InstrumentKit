@@ -97,19 +97,6 @@ class IT8500(ProgrammableLoad, ProgrammableLoad.Channel):
         """,
     )
 
-    overvoltage = unitful_property(
-        "VOLT:PROT",
-        u.volt,
-        doc="""
-        Gets/sets the overvoltage protection setting in volts.
-
-        Note there is no bounds checking on the value specified.
-
-        :units: As specified, or assumed to be :math:`\\text{V}` otherwise.
-        :type: `float` or `~pint.Quantity`
-        """,
-    )
-
     overcurrent = unitful_property(
         "CURR:PROT",
         u.amp,
