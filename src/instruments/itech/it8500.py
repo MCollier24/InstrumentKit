@@ -7,6 +7,7 @@ Originally contributed by Matthew Collier (matthew.collier@outlook.com)
 
 # IMPORTS #####################################################################
 
+from enum import Enum
 
 from instruments.units import ureg as u
 
@@ -42,8 +43,16 @@ class IT8500(ProgrammableLoad, ProgrammableLoad.Channel):
 
     # ENUMS ##
 
-    # I don't know of any possible enumerations supported
-    # by this instrument.
+    class Mode(Enum):
+        """Enum containing valid input modes of the IT8500"""
+
+        CC = "CURR"
+        CV = "VOLT"
+        CP = "POW"
+        CR = "RES"
+        DYN = "DYN"
+        LED = "LED"
+        CI = "IMP"
 
     # PROPERTIES ##
 
@@ -137,18 +146,19 @@ class IT8500(ProgrammableLoad, ProgrammableLoad.Channel):
         return " ".join(idn_list[:2])
 
     @property
-    def mode(self):
+    def mode(self) -> Mode:
         """
-        Unimplemented.
+        Gets the operating mode of the instrument
         """
-        raise NotImplementedError("Setting the mode is not implemented.")
+        return self.Mode(self.query("MODE?"))
 
     @mode.setter
-    def mode(self, newval):
+    def mode(self, newval: Mode):
         """
-        Unimplemented.
+        Sets the operating mode of the instrument
         """
-        raise NotImplementedError("Setting the mode is not implemented.")
+        new_mode = newval.value
+        self.sendcmd(f"MODE:{new_mode}")
 
     # METHODS ##
 
