@@ -46,13 +46,21 @@ class IT8500(ProgrammableLoad, ProgrammableLoad.Channel):
     class Mode(Enum):
         """Enum containing valid input modes of the IT8500"""
 
-        CC = "CURR"
-        CV = "VOLT"
-        CP = "POW"
-        CR = "RES"
-        DYN = "DYN"
+        CC = "CURRent"
+        CV = "VOLTage"
+        CP = "POWer"
+        CR = "RESistance"
+        DYN = "DYNamic"
         LED = "LED"
-        CI = "IMP"
+        CI = "IMPedance"
+
+        @classmethod
+        def from_value(cls, value: str):
+            for member in cls:
+                if member.value == value:
+                    return member
+
+            raise ValueError(f"{value} is not a valid value for {cls.__name__}")
 
     # PROPERTIES ##
 
@@ -150,17 +158,38 @@ class IT8500(ProgrammableLoad, ProgrammableLoad.Channel):
         """
         Gets the operating mode of the instrument
         """
-        return self.Mode(self.query("MODE?"))
+        return self.Mode.from_value(self.query("MODE?"))
 
     @mode.setter
     def mode(self, newval: Mode):
         """
         Sets the operating mode of the instrument
         """
-        new_mode = newval.value
-        self.sendcmd(f"MODE:{new_mode}")
+        self.sendcmd(f"MODE {newval.value}")
+
+    @property
+    def enable_remote_mode(self):
+        """
+        Gets / sets the status of remote mode.
+        """
+        return self._remote_mode
+
+    @enable_remote_mode.setter
+    def enable_remote_mode(self, newval: bool):
+        if newval and not self._remote_mode:
+            self._remote_mode = True
+            self.sendcmd("SYST:REM")
+        elif not newval and self._remote_mode:
+            self._remote_mode = False
+            self.sendcmd("SYST:LOC")
 
     # METHODS ##
+    def __init__(self, filelike):
+        super().__init__(filelike)
+
+        # Set instrument to remote mode
+        self.sendcmd("SYST:REM")
+        self._remote_mode = True
 
     def reset(self):
         """
