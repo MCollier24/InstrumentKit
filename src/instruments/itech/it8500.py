@@ -168,14 +168,14 @@ class IT8500(ProgrammableLoad, ProgrammableLoad.Channel):
         self.sendcmd(f"MODE {newval.value}")
 
     @property
-    def enable_remote_mode(self):
+    def remote_mode(self):
         """
         Gets / sets the status of remote mode.
         """
         return self._remote_mode
 
-    @enable_remote_mode.setter
-    def enable_remote_mode(self, newval: bool):
+    @remote_mode.setter
+    def remote_mode(self, newval: bool):
         if newval and not self._remote_mode:
             self._remote_mode = True
             self.sendcmd("SYST:REM")
@@ -183,13 +183,38 @@ class IT8500(ProgrammableLoad, ProgrammableLoad.Channel):
             self._remote_mode = False
             self.sendcmd("SYST:LOC")
 
+    @property
+    def remote_sense(self):
+        """
+        Gets / sets the status of remote mode.
+        """
+        return self._remote_sense
+
+    @remote_sense.setter
+    def remote_sense(self, newval: bool):
+        # Set to remote mode if necessary
+        if not self._remote_mode:
+            self.remote_mode = True
+
+        # Enable remote sense
+        if newval and not self._remote_sense:
+            self._remote_sense = True
+            self.sendcmd("SYST:SENS ON")
+        elif not newval and self._remote_sense:
+            self._remote_sense = False
+            self.sendcmd("SYST:SENS OFF")
+
     # METHODS ##
     def __init__(self, filelike):
         super().__init__(filelike)
 
         # Set instrument to remote mode
-        self.sendcmd("SYST:REM")
-        self._remote_mode = True
+        self.sendcmd("SYST:LOC")
+        self._remote_mode = False
+
+        # Initilize remote sense state
+        self.sendcmd("SYST:SENS OFF")
+        self._remote_sense = False
 
     def reset(self):
         """

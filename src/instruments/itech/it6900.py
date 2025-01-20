@@ -180,7 +180,29 @@ class IT6900(PowerSupply, PowerSupply.Channel):
         """
         raise NotImplementedError("Setting the mode is not implemented.")
 
+    @property
+    def remote_mode(self):
+        """
+        Gets / sets the status of remote mode.
+        """
+        return self._remote_mode
+
+    @remote_mode.setter
+    def remote_mode(self, newval: bool):
+        if newval and not self._remote_mode:
+            self._remote_mode = True
+            self.sendcmd("SYST:REM")
+        elif not newval and self._remote_mode:
+            self._remote_mode = False
+            self.sendcmd("SYST:LOC")
+
     # METHODS ##
+    def __init__(self, filelike):
+        super().__init__(filelike)
+
+        # Set instrument to remote mode
+        self.sendcmd("SYST:REM")
+        self._remote_mode = True
 
     def reset(self):
         """
