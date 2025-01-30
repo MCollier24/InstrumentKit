@@ -21,6 +21,7 @@ from . import glassman
 from . import hcp
 from . import holzworth
 from . import hp
+from . import itech
 from . import keithley
 from . import kiprim
 from . import lakeshore

@@ -4,5 +4,5 @@ Module containing ITECH instruments
 """
 
 
-from instruments.itech.it8500 import IT8500
+from instruments.itech.it8500plus import IT8500plus
 from instruments.itech.it6900 import IT6900

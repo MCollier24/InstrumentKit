@@ -6,6 +6,7 @@ Provides an abstract base class for programmable load instruments
 # IMPORTS #####################################################################
 
 import abc
+from enum import Enum
 
 from instruments.abstract_instruments import Instrument
 
@@ -27,6 +28,17 @@ class ProgrammableLoad(Instrument, metaclass=abc.ABCMeta):
         All applicable concrete instruments should inherit from this ABC to
         provide a consistent interface to the user.
         """
+
+        # ENUMS #
+        class Mode(Enum):
+            """
+            Enum containg valid input modes for many programmable loads
+            """
+
+            cc = "CURRent"
+            cv = "VOLTage"
+            cp = "POWer"
+            cr = "RESistance"
 
         # PROPERTIES #
 
@@ -107,30 +119,13 @@ class ProgrammableLoad(Instrument, metaclass=abc.ABCMeta):
 
     @property
     @abc.abstractmethod
-    def voltage(self):
+    def remote_mode(self):
         """
-        Gets/sets the input voltage for all channel on the programmable load.
-        This is an abstract method.
+        Gets / sets the status of the instruments remote operation mode.
 
-        :type: `~pint.Quantity`
-        """
-
-    @voltage.setter
-    @abc.abstractmethod
-    def voltage(self, newval):
-        pass
-
-    @property
-    @abc.abstractmethod
-    def current(self):
-        """
-        Gets/sets the input current for all channel on the programmable load.
-        This is an abstract method.
-
-        :type: `~pint.Quantity`
+        :type: `bool`
         """
 
-    @current.setter
-    @abc.abstractmethod
-    def current(self, newval):
+    @remote_mode.setter
+    def remote_mode(self, newval: bool):
         pass
