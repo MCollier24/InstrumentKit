@@ -89,6 +89,21 @@ class ProgrammableLoad(Instrument, metaclass=abc.ABCMeta):
 
         @property
         @abc.abstractmethod
+        def current_range(self):
+            """
+            Gets/sets the input current range for the programmable load channel. This is an
+            abstract method.
+
+            :type: `~pint.Quantity`
+            """
+
+        @current.setter
+        @abc.abstractmethod
+        def current_range(self, newval):
+            pass
+
+        @property
+        @abc.abstractmethod
         def input(self):
             """
             Gets/sets the input status for the programmable load channel. This is an

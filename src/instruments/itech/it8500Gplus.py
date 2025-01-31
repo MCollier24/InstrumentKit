@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 """
-Driver for the ITECH IT8500+ single input programmable load
+Driver for the ITECH IT8500G+ single input programmable load
 
 Originally contributed by Matthew Collier (matthew.collier@outlook.com)
 """
@@ -16,9 +16,9 @@ from instruments.util_fns import enum_property, unitful_property, bool_property
 # CLASSES #####################################################################
 
 
-class IT8500plus(ProgrammableLoad, ProgrammableLoad.Channel):
+class IT8500Gplus(ProgrammableLoad, ProgrammableLoad.Channel):
     """
-    The IT8500+ is a single input programmable load.
+    The IT8500G+ is a single input programmable load.
 
     Because it is a single channel input, this object inherits from both
     ProgrammableLoad and ProgrammableLoad.Channel.
@@ -27,7 +27,7 @@ class IT8500plus(ProgrammableLoad, ProgrammableLoad.Channel):
 
     >>> import time
     >>> import instruments as ik
-    >>> psu = ik.itech.IT8500plus.open_visa(<visa-adress>)
+    >>> psu = ik.itech.IT8500Gplus.open_visa(<visa-adress>)
     >>> psu.voltage = 3 # Sets input voltage to 3V.
     >>> psu.input = True
     >>> psu.voltage
@@ -182,6 +182,19 @@ class IT8500plus(ProgrammableLoad, ProgrammableLoad.Channel):
         """,
     )
 
+    cv_current_limit = unitful_property(
+        "VOLT:ILIMIT",
+        u.amp,
+        doc="""
+        Gets/sets the input maximum current in CV mode.
+
+        Note there is no bounds checking on the value specified.
+
+        :units: As specified, or assumed to be :math:`\\text{A}` otherwise.
+        :type: `float` or `~pint.Quantity`
+        """,
+    )
+
     input = bool_property(
         "INP",
         inst_true="1",
@@ -202,7 +215,7 @@ class IT8500plus(ProgrammableLoad, ProgrammableLoad.Channel):
         doc="""
         Gets/sets the input mode of the programmable load
 
-        :type: `IT8500plus.Mode`
+        :type: `IT8500Gplus.Mode`
         """,
     )
 
@@ -271,9 +284,9 @@ class IT8500plus(ProgrammableLoad, ProgrammableLoad.Channel):
     def channel(self):
         """
         Return the channel (which in this case is the entire instrument, since
-        there is only 1 channel on the IT8500+.)
+        there is only 1 channel on the IT8500G+.)
 
         :rtype: 'tuple' of length 1 containing a reference back to the parent
-            IT8500plus object.
+            IT8500Gplus object.
         """
         return (self,)
