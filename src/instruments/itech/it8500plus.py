@@ -12,6 +12,7 @@ from instruments.units import ureg as u
 from instruments.abstract_instruments import ProgrammableLoad
 from instruments.util_fns import enum_property, unitful_property, bool_property
 
+import time
 
 # CLASSES #####################################################################
 
@@ -198,11 +199,11 @@ class IT8500plus(ProgrammableLoad, ProgrammableLoad.Channel):
 
     mode = enum_property(
         command="MODE",
-        enum=ProgrammableLoad.Channel.Mode,
+        enum=ProgrammableLoad.Mode,
         doc="""
         Gets/sets the input mode of the programmable load
 
-        :type: `IT8500plus.Mode`
+        :type: `ProgrammableLoad.Mode`
         """,
     )
 
@@ -265,6 +266,11 @@ class IT8500plus(ProgrammableLoad, ProgrammableLoad.Channel):
     # METHODS ##
     def __init__(self, filelike):
         super().__init__(filelike)
+
+        # Set terminator
+        self.terminator = "\n"
+
+        time.sleep(0.5)
 
         # Set instrument to remote mode
         self.sendcmd("SYST:REM")

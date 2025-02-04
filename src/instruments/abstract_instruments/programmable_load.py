@@ -29,17 +29,6 @@ class ProgrammableLoad(Instrument, metaclass=abc.ABCMeta):
         provide a consistent interface to the user.
         """
 
-        # ENUMS #
-        class Mode(Enum):
-            """
-            Enum containg valid input modes for many programmable loads
-            """
-
-            cc = "CURRent"
-            cv = "VOLTage"
-            cp = "POWer"
-            cr = "RESistance"
-
         # PROPERTIES #
 
         @property
@@ -132,6 +121,17 @@ class ProgrammableLoad(Instrument, metaclass=abc.ABCMeta):
         def input(self, newval):
             pass
 
+    # ENUMS #
+    class Mode(Enum):
+        """
+        Enum containg valid input modes for many programmable loads
+        """
+
+        CC = "CURRent"
+        CV = "VOLTage"
+        CP = "POWer"
+        CR = "RESistance"
+
     # PROPERTIES #
 
     @property
@@ -146,16 +146,3 @@ class ProgrammableLoad(Instrument, metaclass=abc.ABCMeta):
         :rtype: `ProgrammableLoad.Channel`
         """
         raise NotImplementedError
-
-    @property
-    @abc.abstractmethod
-    def remote_mode(self):
-        """
-        Gets / sets the status of the instruments remote operation mode.
-
-        :type: `bool`
-        """
-
-    @remote_mode.setter
-    def remote_mode(self, newval: bool):
-        pass

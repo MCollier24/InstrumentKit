@@ -211,11 +211,11 @@ class IT8500Gplus(ProgrammableLoad, ProgrammableLoad.Channel):
 
     mode = enum_property(
         command="MODE",
-        enum=ProgrammableLoad.Channel.Mode,
+        enum=ProgrammableLoad.Mode,
         doc="""
         Gets/sets the input mode of the programmable load
 
-        :type: `IT8500Gplus.Mode`
+        :type: `ProgrammableLoad.Mode`
         """,
     )
 
