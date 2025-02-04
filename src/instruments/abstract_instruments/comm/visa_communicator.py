@@ -186,7 +186,7 @@ class VisaCommunicator(io.IOBase, AbstractCommunicator):
 
         :param str msg: The command message to send to the instrument
         """
-        self.write(msg)
+        self._conn.write(msg)
 
     def _query(self, msg, size=-1):
         """
