@@ -93,6 +93,21 @@ class ProgrammableLoad(Instrument, metaclass=abc.ABCMeta):
 
         @property
         @abc.abstractmethod
+        def voltage_range(self):
+            """
+            Gets/sets the input voltage range for the programmable load channel. This is an
+            abstract method.
+
+            :type: `~pint.Quantity`
+            """
+
+        @voltage_range.setter
+        @abc.abstractmethod
+        def voltage_range(self, newval):
+            pass
+
+        @property
+        @abc.abstractmethod
         def cv_current_limit(self):
             """
             Gets/sets the input current limit for the programmable load channel in CV mode.

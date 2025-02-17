@@ -267,11 +267,6 @@ class IT8500plus(ProgrammableLoad, ProgrammableLoad.Channel):
     def __init__(self, filelike):
         super().__init__(filelike)
 
-        # Set terminator
-        self.terminator = "\n"
-
-        time.sleep(0.5)
-
         # Set instrument to remote mode
         self.sendcmd("SYST:REM")
         self._remote_mode = True
