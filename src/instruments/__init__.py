@@ -24,6 +24,7 @@ from . import hp
 from . import itech
 from . import keithley
 from . import kiprim
+from . import korad
 from . import lakeshore
 from . import mettler_toledo
 from . import minghe

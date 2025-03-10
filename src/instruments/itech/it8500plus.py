@@ -256,13 +256,6 @@ class IT8500plus(ProgrammableLoad, ProgrammableLoad.Channel):
         """
         raise NotImplementedError("Setting the CV current limit is not supported.")
 
-    @mode.setter
-    def cv_current_limit(self, newval):
-        """
-        Unimplemented.
-        """
-        raise NotImplementedError("Setting the CV current limit is not supported.")
-
     # METHODS ##
     def __init__(self, filelike):
         super().__init__(filelike)
