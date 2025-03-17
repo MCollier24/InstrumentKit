@@ -56,7 +56,7 @@ class KEL10X(ProgrammableLoad, ProgrammableLoad.Channel):
     voltage = unitful_property(
         ":VOLT",
         u.volt,
-        format_code="{:d}V",
+        format_code="{:f}V",
         doc="""
         Gets/sets the input voltage.
 
@@ -70,7 +70,7 @@ class KEL10X(ProgrammableLoad, ProgrammableLoad.Channel):
     current = unitful_property(
         ":CURR",
         u.amp,
-        format_code="{:d}A",
+        format_code="{:f}A",
         doc="""
         Gets/sets the input current.
 
@@ -122,10 +122,24 @@ class KEL10X(ProgrammableLoad, ProgrammableLoad.Channel):
         """
         Unimplemented.
         """
+        raise NotImplementedError("Getting the current range is not supported.")
+    
+    @current_range.setter
+    def current_range(self, new_current_range):
+        """
+        Unimplemented.
+        """
         raise NotImplementedError("Setting the current range is not supported.")
     
     @property
     def voltage_range(self):
+        """
+        Unimplemented.
+        """
+        raise NotImplementedError("Getting the voltage range is not supported.")
+    
+    @voltage_range.setter
+    def voltage_range(self, new_voltage_range):
         """
         Unimplemented.
         """
@@ -136,17 +150,17 @@ class KEL10X(ProgrammableLoad, ProgrammableLoad.Channel):
         """
         Unimplemented.
         """
-        raise NotImplementedError("Setting the CV current limit is not supported.")
+        raise NotImplementedError("Getting the CV current limit is not supported.")
 
-    @property
-    def cv_current_limit(self):
+    @cv_current_limit.setter
+    def cv_current_limit(self, new_current_limit):
         """
         Unimplemented.
         """
         raise NotImplementedError("Setting the CV current limit is not supported.")
 
     input = bool_property(
-        "INP",
+        ":INP",
         inst_true="1",
         inst_false="0",
         doc="""
