@@ -254,6 +254,13 @@ class IT8500plus(ProgrammableLoad, ProgrammableLoad.Channel):
         """
         Unimplemented.
         """
+        raise NotImplementedError("Getting the CV current limit is not supported.")
+
+    @cv_current_limit.setter
+    def cv_current_limit(self, new_current_limit):
+        """
+        Unimplemented.
+        """
         raise NotImplementedError("Setting the CV current limit is not supported.")
 
     # METHODS ##
