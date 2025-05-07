@@ -240,10 +240,10 @@ class IT8500Gplus(ProgrammableLoad, ProgrammableLoad.Channel):
 
     @remote_mode.setter
     def remote_mode(self, newval: bool):
-        if newval and not self._remote_mode:
+        if newval:
             self._remote_mode = True
             self.sendcmd("SYST:REM")
-        elif not newval and self._remote_mode:
+        else:
             self._remote_mode = False
             self.sendcmd("SYST:LOC")
 

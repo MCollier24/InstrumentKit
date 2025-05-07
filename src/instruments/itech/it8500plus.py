@@ -228,10 +228,10 @@ class IT8500plus(ProgrammableLoad, ProgrammableLoad.Channel):
 
     @remote_mode.setter
     def remote_mode(self, newval: bool):
-        if newval and not self._remote_mode:
+        if newval:
             self._remote_mode = True
             self.sendcmd("SYST:REM")
-        elif not newval and self._remote_mode:
+        else:
             self._remote_mode = False
             self.sendcmd("SYST:LOC")
 
@@ -254,14 +254,18 @@ class IT8500plus(ProgrammableLoad, ProgrammableLoad.Channel):
         """
         Unimplemented.
         """
-        raise NotImplementedError("Getting the CV current limit is not supported.")
+        raise NotImplementedError(
+            "Getting the CV current limit is not supported."
+        )
 
     @cv_current_limit.setter
     def cv_current_limit(self, new_current_limit):
         """
         Unimplemented.
         """
-        raise NotImplementedError("Setting the CV current limit is not supported.")
+        raise NotImplementedError(
+            "Setting the CV current limit is not supported."
+        )
 
     # METHODS ##
     def __init__(self, filelike):
