@@ -10,7 +10,7 @@ Originally contributed by Matthew Collier (matthew.collier@outlook.com)
 from instruments.units import ureg as u
 
 from instruments.abstract_instruments import ProgrammableLoad
-from instruments.util_fns import enum_property, unitful_property, bool_property
+from instruments.util_fns import unitful_property, bool_property
 
 
 # CLASSES #####################################################################
@@ -123,28 +123,28 @@ class KEL10X(ProgrammableLoad, ProgrammableLoad.Channel):
         Unimplemented.
         """
         raise NotImplementedError("Getting the current range is not supported.")
-    
+
     @current_range.setter
     def current_range(self, new_current_range):
         """
         Unimplemented.
         """
         raise NotImplementedError("Setting the current range is not supported.")
-    
+
     @property
     def voltage_range(self):
         """
         Unimplemented.
         """
         raise NotImplementedError("Getting the voltage range is not supported.")
-    
+
     @voltage_range.setter
     def voltage_range(self, new_voltage_range):
         """
         Unimplemented.
         """
         raise NotImplementedError("Setting the voltage range is not supported.")
-    
+
     @property
     def cv_current_limit(self):
         """

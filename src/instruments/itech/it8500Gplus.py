@@ -14,8 +14,6 @@ from instruments.util_fns import enum_property, unitful_property, bool_property
 
 
 # CLASSES #####################################################################
-
-
 class IT8500Gplus(ProgrammableLoad, ProgrammableLoad.Channel):
     """
     The IT8500G+ is a single input programmable load.
@@ -219,33 +217,21 @@ class IT8500Gplus(ProgrammableLoad, ProgrammableLoad.Channel):
         """,
     )
 
-    @property
-    def name(self):
-        """
-        The name of the connected instrument, as reported by the
-        standard SCPI command ``*IDN?``.
+    remote_mode = bool_property(
+        command="SYST",
+        inst_true="REM",
+        inst_false="LOC",
+        writeonly=True,
+        set_fmt="{}:{}",
+        doc="""
+        Gets/sets the remote operation mode of the instrument.
 
-        :rtype: `str`
-        """
-        idn_string = self.query("*IDN?")
-        idn_list = idn_string.split(",")
-        return " ".join(idn_list[:2])
+        This is a toggle setting. True will set to remote mode
+        while False will set to local mode.
 
-    @property
-    def remote_mode(self):
-        """
-        Gets / sets the status of remote mode.
-        """
-        return self._remote_mode
-
-    @remote_mode.setter
-    def remote_mode(self, newval: bool):
-        if newval:
-            self._remote_mode = True
-            self.sendcmd("SYST:REM")
-        else:
-            self._remote_mode = False
-            self.sendcmd("SYST:LOC")
+        :type: `bool`
+        """,
+    )
 
     remote_sense = bool_property(
         "SYST:SENS",
@@ -261,13 +247,24 @@ class IT8500Gplus(ProgrammableLoad, ProgrammableLoad.Channel):
         """,
     )
 
+    @property
+    def name(self):
+        """
+        The name of the connected instrument, as reported by the
+        standard SCPI command ``*IDN?``.
+
+        :rtype: `str`
+        """
+        idn_string = self.query("*IDN?")
+        idn_list = idn_string.split(",")
+        return " ".join(idn_list[:2])
+
     # METHODS ##
     def __init__(self, filelike):
         super().__init__(filelike)
 
         # Set instrument to remote mode
-        self.sendcmd("SYST:REM")
-        self._remote_mode = True
+        self.remote_mode = True
 
     def reset(self):
         """
